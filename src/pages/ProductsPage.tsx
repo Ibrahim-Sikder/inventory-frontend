@@ -1,20 +1,104 @@
 import { useState, useMemo } from 'react'
-import { mockProducts } from '../data/mockData'
-import { Search, Plus, Edit2, Trash2 } from 'lucide-react'
+import { Search, Plus, Edit2, Trash2, Loader2 } from 'lucide-react'
+import toast from 'react-hot-toast'
+import Swal from 'sweetalert2'
+import {
+  useDeleteProductMutation,
+  useGetAllProductsQuery
+} from '../redux/api/productApi'
+import { ProductModal } from './ProductModal'
 
 export function ProductsPage() {
   const [searchTerm, setSearchTerm] = useState('')
-  const [showAddForm, setShowAddForm] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<any>(null)
 
-  const filteredProducts = useMemo(
-    () =>
-      mockProducts.filter(
-        (product) =>
-          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          product.sku.toLowerCase().includes(searchTerm.toLowerCase())
-      ),
-    [searchTerm]
-  )
+  // Fetch products from API
+  const { data, isLoading, error, refetch } = useGetAllProductsQuery({
+    page: 1,
+    limit: 100,
+    searchTerm: searchTerm,
+  })
+
+  const [deleteProduct, { isLoading: isDeleting }] = useDeleteProductMutation()
+
+  const products = data?.data || []
+
+  const filteredProducts = useMemo(() => {
+    if (!searchTerm) return products
+    return products.filter(
+      (product: any) =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.sku.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  }, [products, searchTerm])
+
+  const handleDelete = async (product: any) => {
+    // Show SweetAlert confirmation
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: `You are about to delete "${product.name}". This action cannot be undone!`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true,
+    })
+
+    if (result.isConfirmed) {
+      try {
+        await deleteProduct(product._id).unwrap()
+
+        // Show success toast
+        toast.success(`Product "${product.name}" deleted successfully! 🗑️`)
+
+        // Refresh the product list
+        refetch()
+      } catch (error: any) {
+        console.error('Error deleting product:', error)
+        const errorMessage = error?.data?.message || 'Failed to delete product'
+        toast.error(errorMessage)
+      }
+    }
+  }
+
+  const handleEdit = (product: any) => {
+    setSelectedProduct(product)
+    setIsModalOpen(true)
+  }
+
+  const handleModalClose = () => {
+    setIsModalOpen(false)
+    setSelectedProduct(null)
+  }
+
+  const handleModalSuccess = () => {
+    refetch()
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-danger">Error loading products. Please try again.</p>
+        <button
+          onClick={() => refetch()}
+          className="mt-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark"
+        >
+          Retry
+        </button>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6">
@@ -22,72 +106,21 @@ export function ProductsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-foreground">Products</h1>
-          <p className="text-muted mt-1">Manage your product inventory</p>
+          <p className="text-muted mt-1">
+            Manage your product inventory ({products.length} products)
+          </p>
         </div>
         <button
-          onClick={() => setShowAddForm(!showAddForm)}
+          onClick={() => {
+            setSelectedProduct(null)
+            setIsModalOpen(true)
+          }}
           className="flex items-center gap-2 bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg transition-colors"
         >
           <Plus className="w-4 h-4" />
           Add Product
         </button>
       </div>
-
-      {/* Add Product Form */}
-      {showAddForm && (
-        <div className="bg-card border border-border rounded-xl p-6">
-          <h2 className="text-lg font-bold text-foreground mb-4">
-            Add New Product
-          </h2>
-          <form className="grid grid-cols-2 gap-4">
-            <input
-              type="text"
-              placeholder="Product Name"
-              className="col-span-2 px-4 py-2 rounded-lg bg-background border border-border text-foreground placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <input
-              type="text"
-              placeholder="SKU"
-              className="px-4 py-2 rounded-lg bg-background border border-border text-foreground placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <input
-              type="text"
-              placeholder="Category"
-              className="px-4 py-2 rounded-lg bg-background border border-border text-foreground placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <input
-              type="number"
-              placeholder="Buy Price"
-              className="px-4 py-2 rounded-lg bg-background border border-border text-foreground placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <input
-              type="number"
-              placeholder="Sell Price"
-              className="px-4 py-2 rounded-lg bg-background border border-border text-foreground placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <input
-              type="number"
-              placeholder="Stock"
-              className="px-4 py-2 rounded-lg bg-background border border-border text-foreground placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            <div className="col-span-2 flex gap-3">
-              <button
-                type="button"
-                onClick={() => setShowAddForm(false)}
-                className="flex-1 px-4 py-2 rounded-lg bg-background border border-border text-foreground hover:bg-card transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="flex-1 px-4 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white transition-colors"
-              >
-                Add Product
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
 
       {/* Search */}
       <div className="flex items-center gap-3">
@@ -101,29 +134,49 @@ export function ProductsPage() {
             className="w-full pl-10 pr-4 py-2 rounded-lg bg-card border border-border text-foreground placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
+        <div className="text-sm text-muted">
+          {filteredProducts.length} results
+        </div>
       </div>
 
       {/* Products Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredProducts.map((product) => (
+        {filteredProducts.map((product: any) => (
           <div
-            key={product.id}
+            key={product._id}
             className="bg-card border border-border rounded-xl p-6 hover:border-primary/50 transition-colors"
           >
             <div className="flex items-start justify-between mb-4">
-              <div className="text-4xl">{product.icon}</div>
               <div className="flex gap-2">
-                <button className="p-2 hover:bg-background rounded-lg transition-colors">
+                {product.images && product.images.length > 0 && (
+                  <img
+                    src={product.images[0]}
+                    alt={product.name}
+                    className="w-12 h-12 object-cover rounded-lg"
+                  />
+                )}
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleEdit(product)}
+                  className="p-2 hover:bg-background rounded-lg transition-colors"
+                  title="Edit product"
+                >
                   <Edit2 className="w-4 h-4 text-muted hover:text-foreground" />
                 </button>
-                <button className="p-2 hover:bg-background rounded-lg transition-colors">
+                <button
+                  onClick={() => handleDelete(product)}
+                  disabled={isDeleting}
+                  className="p-2 hover:bg-background rounded-lg transition-colors"
+                  title="Delete product"
+                >
                   <Trash2 className="w-4 h-4 text-danger" />
                 </button>
               </div>
             </div>
 
             <h3 className="font-bold text-foreground mb-1">{product.name}</h3>
-            <p className="text-xs text-muted mb-4">{product.sku}</p>
+            <p className="text-xs text-muted mb-4">SKU: {product.sku}</p>
 
             <div className="space-y-2 mb-4 text-sm">
               <div className="flex justify-between">
@@ -132,11 +185,11 @@ export function ProductsPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-muted">Buy Price:</span>
-                <span className="text-foreground font-medium">₹{product.buyPrice}</span>
+                <span className="text-foreground font-medium">₹{product.purchasePrice}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted">Sell Price:</span>
-                <span className="text-primary font-medium">₹{product.sellPrice}</span>
+                <span className="text-primary font-medium">₹{product.sellingPrice}</span>
               </div>
             </div>
 
@@ -144,23 +197,19 @@ export function ProductsPage() {
             <div className="bg-background rounded-lg p-3">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-xs text-muted">Stock Level</span>
-                <span className={`text-sm font-bold ${
-                  product.stock > 10 ? 'text-success' : product.stock > 5 ? 'text-warning' : 'text-danger'
-                }`}>
-                  {product.stock} units
+                <span className={`text-sm font-bold ${product.stockQuantity > 10 ? 'text-success' :
+                  product.stockQuantity > 5 ? 'text-warning' : 'text-danger'
+                  }`}>
+                  {product.stockQuantity} units
                 </span>
               </div>
               <div className="w-full bg-card rounded-full h-2">
                 <div
-                  className={`h-full rounded-full ${
-                    product.stock > 10
-                      ? 'bg-success'
-                      : product.stock > 5
-                      ? 'bg-warning'
-                      : 'bg-danger'
-                  }`}
-                  style={{ width: `${Math.min((product.stock / 20) * 100, 100)}%` }}
-                ></div>
+                  className={`h-full rounded-full ${product.stockQuantity > 10 ? 'bg-success' :
+                    product.stockQuantity > 5 ? 'bg-warning' : 'bg-danger'
+                    }`}
+                  style={{ width: `${Math.min((product.stockQuantity / 20) * 100, 100)}` }}
+                />
               </div>
             </div>
           </div>
@@ -169,9 +218,19 @@ export function ProductsPage() {
 
       {filteredProducts.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-muted">No products found</p>
+          <p className="text-muted">
+            {searchTerm ? 'No products found matching your search' : 'No products available'}
+          </p>
         </div>
       )}
+
+      {/* Product Modal */}
+      <ProductModal
+        isOpen={isModalOpen}
+        onClose={handleModalClose}
+        onSuccess={handleModalSuccess}
+        product={selectedProduct}
+      />
     </div>
   )
 }

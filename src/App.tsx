@@ -11,19 +11,20 @@ import { useAuth } from './hooks/useAuth'
 import { useAppDispatch } from './redux/hooks'
 import { setUser, setAuthLoading, logout } from './redux/features/auth/authSlice'
 import { useLazyGetMeQuery } from './redux/api/auth.api'
+import { Toaster } from 'react-hot-toast'
 
 type TRole = 'admin' | 'manager' | 'employee'
 
 function ProtectedRoute({ children, roles }: { children: React.ReactNode; roles?: TRole[] }) {
   const { isAuthenticated, isLoading, user } = useAuth()
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex items-center justify-center min-h-screen bg-background">
-  //       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-  //     </div>
-  //   )
-  // }
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
 
   if (!isAuthenticated) return <Navigate to="/login" replace />
   if (roles && user && !roles.includes(user.role as TRole)) return <Navigate to="/dashboard" replace />
@@ -35,13 +36,13 @@ function ProtectedRoute({ children, roles }: { children: React.ReactNode; roles?
 function AppRoutes() {
   const { isAuthenticated, isLoading } = useAuth()
 
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex items-center justify-center min-h-screen bg-background">
-  //       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-  //     </div>
-  //   )
-  // }
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-background">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    )
+  }
 
   return (
     <Routes>
@@ -99,7 +100,7 @@ export default function App() {
         const result = await triggerGetMe().unwrap()
         dispatch(setUser(result.data))
       } catch {
-        // Only clear user if nobody logged in manually while this request was in flight
+
         dispatch((_dispatch, getState) => {
           if (!getState().auth.user) {
             dispatch(logout())
@@ -113,6 +114,30 @@ export default function App() {
 
   return (
     <BrowserRouter>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+          style: {
+            background: '#1e1e2e',
+            color: '#ffffff',
+            borderRadius: '12px',
+            padding: '16px',
+          },
+          success: {
+            style: {
+              background: '#10b981',
+              color: '#ffffff',
+            },
+          },
+          error: {
+            style: {
+              background: '#ef4444',
+              color: '#ffffff',
+            },
+          },
+        }}
+      />
       <AppRoutes />
     </BrowserRouter>
   )

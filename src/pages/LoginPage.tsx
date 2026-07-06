@@ -23,9 +23,6 @@ export function LoginPage() {
         credential: email,
         password: password,
       }).unwrap()
-
-      // backend sets the JWT as an httpOnly cookie itself.
-      // we only store the returned user profile in redux.
       dispatch(setUser(response.data))
 
       navigate('/dashboard')
