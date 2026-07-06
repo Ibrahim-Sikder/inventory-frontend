@@ -5,7 +5,8 @@ export const tagTypesList = [
   "customer",
   "product",
   "customer",
-  "sale"
+  "sale",
+  "dashboard"
 ] as const;
 
 export type TagType = (typeof tagTypesList)[number];

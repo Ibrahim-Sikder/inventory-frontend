@@ -1,12 +1,13 @@
-import { useState, useMemo } from 'react'
-import { Plus, X, Search, Loader2, Calendar, User, Package, TrendingUp } from 'lucide-react'
+import { useState } from 'react'
+import { Plus, X } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useGetAllSalesQuery } from '../redux/api/saleApi'
 import { useGetAllCustomersQuery } from '../redux/api/customerApi'
 import { useGetAllProductsQuery } from '../redux/api/productApi'
 import { useCreateSaleMutation } from '../redux/api/saleApi'
 import Loading from '../components/Loading'
-import { format } from 'date-fns'
+import { RecentSales } from '../components/RecentSales'
+import { SalesStats } from '../components/SalesStats'
 
 export function SalesPage() {
   const [saleItems, setSaleItems] = useState<
@@ -15,7 +16,6 @@ export function SalesPage() {
   const [selectedCustomer, setSelectedCustomer] = useState('')
   const [selectedProduct, setSelectedProduct] = useState('')
   const [quantity, setQuantity] = useState(1)
-  const [searchTerm, setSearchTerm] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   // API Hooks
@@ -29,7 +29,12 @@ export function SalesPage() {
     limit: 100,
   })
 
-  const { data: salesData, isLoading: isLoadingSales, error, refetch } = useGetAllSalesQuery({
+  const {
+    data: salesData,
+    isLoading: isLoadingSales,
+    error,
+    refetch
+  } = useGetAllSalesQuery({
     page: 1,
     limit: 100,
     sort: '-createdAt',
@@ -45,16 +50,6 @@ export function SalesPage() {
   const totalSales = sales.length
   const totalRevenue = sales.reduce((sum: number, sale: any) => sum + sale.grandTotal, 0)
   const averageOrderValue = totalSales > 0 ? totalRevenue / totalSales : 0
-
-  // Filter sales for search
-  const filteredSales = useMemo(() => {
-    if (!searchTerm) return sales
-    return sales.filter(
-      (sale: any) =>
-        sale.customer?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        sale._id.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  }, [sales, searchTerm])
 
   // Add item to sale
   const addItem = () => {
@@ -185,6 +180,13 @@ export function SalesPage() {
         <p className="text-muted mt-1">Create and manage sales transactions</p>
       </div>
 
+      {/* Stats Cards */}
+      <SalesStats
+        totalSales={totalSales}
+        totalRevenue={totalRevenue}
+        averageOrderValue={averageOrderValue}
+      />
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Create Sale Form */}
         <div className="lg:col-span-2 bg-card border border-border rounded-xl p-6">
@@ -228,7 +230,7 @@ export function SalesPage() {
                   .filter((p: any) => p.stockQuantity > 0)
                   .map((product: any) => (
                     <option key={product._id} value={product._id}>
-                      {product.name} - ₹{product.sellingPrice} (Stock: {product.stockQuantity})
+                      {product.name} - ৳{product.sellingPrice} (Stock: {product.stockQuantity})
                     </option>
                   ))}
               </select>
@@ -238,14 +240,14 @@ export function SalesPage() {
                 min="1"
                 value={quantity}
                 onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-                className="px-4 py-2 rounded-lg bg-background border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                className="cursor-pointer px-4 py-2 rounded-lg bg-background border border-border text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </div>
 
             <button
               onClick={addItem}
               disabled={isLoadingProducts}
-              className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
+              className=" cursor-pointer w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
             >
               <Plus className="w-4 h-4" />
               Add Item
@@ -273,10 +275,10 @@ export function SalesPage() {
                     return (
                       <tr key={item.productId} className="text-foreground">
                         <td className="py-3">{name}</td>
-                        <td className="text-center">₹{price}</td>
+                        <td className="text-center">৳{price}</td>
                         <td className="text-center">{item.quantity}</td>
                         <td className="text-right font-medium">
-                          ₹{(price * item.quantity).toLocaleString()}
+                          ৳{(price * item.quantity).toLocaleString()}
                         </td>
                         <td className="text-center">
                           <button
@@ -295,7 +297,7 @@ export function SalesPage() {
               <div className="mt-4 pt-4 border-t border-border flex justify-between items-center">
                 <span className="font-semibold text-foreground">Total Amount:</span>
                 <span className="text-2xl font-bold text-primary">
-                  ₹{totalAmount.toLocaleString()}
+                  ৳{totalAmount.toLocaleString()}
                 </span>
               </div>
 
@@ -311,74 +313,13 @@ export function SalesPage() {
         </div>
 
         {/* Recent Sales */}
-        <div className="bg-card border border-border rounded-xl p-6">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-bold text-foreground">Recent Sales</h2>
-            <span className="text-xs text-muted">{totalSales} total</span>
-          </div>
-
-          {/* Stats Summary */}
-          <div className="space-y-2 mb-4 p-3 bg-background rounded-lg">
-            <div className="flex justify-between text-sm">
-              <span className="text-muted">Total Revenue</span>
-              <span className="font-bold text-primary">₹{totalRevenue.toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-muted">Average Order</span>
-              <span className="font-bold text-foreground">₹{averageOrderValue.toLocaleString()}</span>
-            </div>
-          </div>
-
-          {/* Search */}
-          <div className="relative mb-4">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted" />
-            <input
-              type="text"
-              placeholder="Search sales..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-lg bg-background border border-border text-foreground placeholder-muted focus:outline-none focus:ring-2 focus:ring-primary text-sm"
-            />
-          </div>
-
-          <div className="space-y-3 max-h-[400px] overflow-y-auto">
-            {filteredSales.slice(0, 10).map((sale: any) => (
-              <div key={sale._id} className="p-3 bg-background rounded-lg hover:bg-background/70 transition-colors">
-                <div className="flex items-center justify-between">
-                  <p className="font-medium text-foreground text-sm">
-                    {sale.customer?.name || 'Unknown Customer'}
-                  </p>
-                  <span className="text-xs text-muted">
-                    #{sale._id.slice(-6).toUpperCase()}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between mt-1">
-                  <p className="text-xs text-muted">
-                    {sale.createdAt ? format(new Date(sale.createdAt), 'dd MMM yyyy') : 'N/A'}
-                  </p>
-                  <p className="text-primary font-bold text-sm">
-                    ₹{sale.grandTotal?.toLocaleString() || 0}
-                  </p>
-                </div>
-                <div className="mt-1 flex items-center gap-2">
-                  <span className="text-xs text-muted">
-                    {sale.items?.length || 0} items
-                  </span>
-                  <span className="text-xs text-muted">•</span>
-                  <span className="text-xs text-muted">
-                    By: {sale.createdBy || 'N/A'}
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {filteredSales.length === 0 && (
-            <div className="text-center py-8">
-              <p className="text-muted text-sm">No sales found</p>
-            </div>
-          )}
-        </div>
+        <RecentSales
+          sales={sales}
+          totalSales={totalSales}
+          totalRevenue={totalRevenue}
+          averageOrderValue={averageOrderValue}
+          isLoading={isLoadingSales}
+        />
       </div>
     </div>
   )
