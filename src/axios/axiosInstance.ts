@@ -5,7 +5,7 @@ import axios from "axios";
 import { IGenericErrorResponse } from "../types";
 
 const instance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_API_URL,
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
   timeout: 60000,
   headers: {
@@ -13,7 +13,6 @@ const instance = axios.create({
     Accept: "application/json",
   },
 });
-
 
 let isRefreshing = false;
 let failedQueue: Array<{
