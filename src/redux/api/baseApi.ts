@@ -1,5 +1,7 @@
-import { axiosBaseQuery } from "@/axios/axiosBaseQuery";
+// Next.js version
 import { createApi } from "@reduxjs/toolkit/query/react";
+import { axiosBaseQuery } from "../../../src/axios/axiosBaseQuery";
+
 import { tagTypesList } from "./tag-types";
 
 export const baseApi = createApi({
@@ -10,5 +12,3 @@ export const baseApi = createApi({
   endpoints: () => ({}),
   tagTypes: tagTypesList,
 });
-
-export const {} = baseApi;
