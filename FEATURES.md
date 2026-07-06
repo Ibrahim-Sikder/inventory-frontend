@@ -30,7 +30,7 @@ Three pre-configured user roles for testing:
 ### Key Metrics (Real-time)
 - **Total Products**: 6 items in inventory
 - **Total Customers**: 3 registered customers
-- **Total Sales**: ₹113.5K cumulative revenue
+- **Total Sales**: ৳113.5K cumulative revenue
 - **Low Stock Items**: 2 products below threshold
 
 ### Dashboard Widgets
@@ -63,48 +63,48 @@ Complete inventory of 6 products with full details:
 1. **Laptop Dell XPS**
    - SKU: DELL-XPS-001
    - Category: Electronics
-   - Buy Price: ₹45,000
-   - Sell Price: ₹55,000
+   - Buy Price: ৳45,000
+   - Sell Price: ৳55,000
    - Stock: 15 units
    - Status: ✅ Good stock (green)
 
 2. **Mouse Logitech MX**
    - SKU: LOG-MX-002
    - Category: Accessories
-   - Buy Price: ₹2,500
-   - Sell Price: ₹3,500
+   - Buy Price: ৳2,500
+   - Sell Price: ৳3,500
    - Stock: 8 units
    - Status: ✅ Adequate stock
 
 3. **Keyboard Mechanical**
    - SKU: KEY-MECH-003
    - Category: Accessories
-   - Buy Price: ₹5,000
-   - Sell Price: ₹7,500
+   - Buy Price: ৳5,000
+   - Sell Price: ৳7,500
    - Stock: 3 units
    - Status: ⚠️ Low stock (red)
 
 4. **Monitor LG 27"**
    - SKU: LG-27-004
    - Category: Electronics
-   - Buy Price: ₹18,000
-   - Sell Price: ₹22,000
+   - Buy Price: ৳18,000
+   - Sell Price: ৳22,000
    - Stock: 12 units
    - Status: ✅ Good stock
 
 5. **Desk Lamp LED**
    - SKU: LAMP-LED-005
    - Category: Furniture
-   - Buy Price: ₹2,000
-   - Sell Price: ₹3,200
+   - Buy Price: ৳2,000
+   - Sell Price: ৳3,200
    - Stock: 2 units
    - Status: 🔴 Critical (red)
 
 6. **Office Chair Pro**
    - SKU: CHAIR-PRO-006
    - Category: Furniture
-   - Buy Price: ₹8,000
-   - Sell Price: ₹12,000
+   - Buy Price: ৳8,000
+   - Sell Price: ৳12,000
    - Stock: 6 units
    - Status: ⚠️ Low stock (yellow)
 
@@ -155,22 +155,22 @@ Three completed transactions available:
 
 **Sale #1 - Rajesh Kumar**
 - Date: 2024-07-04
-- Item: Laptop Dell XPS (1 × ₹55,000)
-- Total: ₹55,000
+- Item: Laptop Dell XPS (1 × ৳55,000)
+- Total: ৳55,000
 - Status: ✅ Completed
 
 **Sale #2 - Priya Singh**
 - Date: 2024-07-04
-- Item: Monitor LG 27" (2 × ₹22,000)
-- Total: ₹44,000
+- Item: Monitor LG 27" (2 × ৳22,000)
+- Total: ৳44,000
 - Status: ✅ Completed
 
 **Sale #3 - Amit Patel**
 - Date: 2024-07-03
 - Items: 
-  - Mouse Logitech MX (2 × ₹3,500)
-  - Keyboard Mechanical (1 × ₹7,500)
-- Total: ₹14,500
+  - Mouse Logitech MX (2 × ৳3,500)
+  - Keyboard Mechanical (1 × ৳7,500)
+- Total: ৳14,500
 - Status: ✅ Completed
 
 ### Features
@@ -192,7 +192,7 @@ Three completed transactions available:
 - Phone: +91-9876543210
 - Location: Mumbai, Maharashtra
 - Transactions: 5
-- Total Spent: ₹2,500
+- Total Spent: ৳2,500
 - Last Purchase: 2024-07-03
 
 **Customer 2 - Priya Singh**
@@ -200,7 +200,7 @@ Three completed transactions available:
 - Phone: +91-9876543211
 - Location: Delhi, India
 - Transactions: 7
-- Total Spent: ₹3,800
+- Total Spent: ৳3,800
 - Last Purchase: 2024-07-04
 
 **Customer 3 - Amit Patel**
@@ -208,13 +208,13 @@ Three completed transactions available:
 - Phone: +91-9876543212
 - Location: Bangalore, Karnataka
 - Transactions: 4
-- Total Spent: ₹1,900
+- Total Spent: ৳1,900
 - Last Purchase: 2024-07-01
 
 ### Key Metrics
 - **Total Customers**: 3
 - **Total Transactions**: 16
-- **Customer Lifetime Value**: ₹8,200 combined
+- **Customer Lifetime Value**: ৳8,200 combined
 
 ### Features
 - **Customer Table**: All details at a glance
@@ -317,10 +317,10 @@ All data defined in `src/data/mockData.ts`:
 | Total Products | 6 |
 | Total Customers | 3 |
 | Total Transactions | 3 |
-| Cumulative Sales | ₹113,500 |
-| Average Sale | ₹37,833 |
+| Cumulative Sales | ৳113,500 |
+| Average Sale | ৳37,833 |
 | Low Stock Items | 2 |
-| Customer Lifetime Value | ₹8,200 avg |
+| Customer Lifetime Value | ৳8,200 avg |
 
 ---
 

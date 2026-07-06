@@ -5,13 +5,9 @@ import {
     useCreateProductMutation,
     useUpdateProductMutation
 } from '../redux/api/productApi'
+import { ProductModalProps } from '../types/product'
 
-interface ProductModalProps {
-    isOpen: boolean
-    onClose: () => void
-    onSuccess?: () => void
-    product?: any // For edit mode
-}
+
 
 export function ProductModal({ isOpen, onClose, onSuccess, product }: ProductModalProps) {
     const [createProduct, { isLoading: isCreating }] = useCreateProductMutation()
@@ -32,7 +28,6 @@ export function ProductModal({ isOpen, onClose, onSuccess, product }: ProductMod
 
     const isEditMode = !!product
 
-    // Populate form for edit mode
     useEffect(() => {
         if (product) {
             setFormData({
@@ -59,7 +54,7 @@ export function ProductModal({ isOpen, onClose, onSuccess, product }: ProductMod
         if (files.length > 0) {
             setImages((prev) => [...prev, ...files])
 
-            // Create previews
+
             const newPreviews = files.map((file) => URL.createObjectURL(file))
             setImagePreviews((prev) => [...prev, ...newPreviews])
         }
@@ -94,7 +89,6 @@ export function ProductModal({ isOpen, onClose, onSuccess, product }: ProductMod
             let result
 
             if (isEditMode) {
-                // Update Mode
                 const updateData = new FormData()
                 updateData.append('name', formData.name)
                 updateData.append('sku', formData.sku)
@@ -103,7 +97,6 @@ export function ProductModal({ isOpen, onClose, onSuccess, product }: ProductMod
                 updateData.append('sellingPrice', formData.sellingPrice)
                 updateData.append('stockQuantity', formData.stockQuantity)
 
-                // Append new images if any
                 images.forEach((image) => {
                     updateData.append('images', image)
                 })
@@ -114,7 +107,7 @@ export function ProductModal({ isOpen, onClose, onSuccess, product }: ProductMod
                 }).unwrap()
 
                 if (result.success) {
-                    toast.success('Product updated successfully! 🎉')
+                    toast.success('Product updated successfully! ')
                     onSuccess?.()
                     handleClose()
                 }
@@ -136,7 +129,7 @@ export function ProductModal({ isOpen, onClose, onSuccess, product }: ProductMod
                 result = await createProduct(submitData).unwrap()
 
                 if (result.success) {
-                    toast.success('Product created successfully! 🎉')
+                    toast.success('Product created successfully! ')
                     onSuccess?.()
                     handleClose()
                 }

@@ -109,7 +109,7 @@ export default function CustomersPage() {
           </div>
           <div className="bg-card border border-border rounded-xl p-6">
             <p className="text-muted-text text-sm font-medium">Customer Lifetime Value</p>
-            <p className="text-3xl font-bold text-primary mt-2">₹{totalCustomerValue.toFixed(0)}</p>
+            <p className="text-3xl font-bold text-primary mt-2">৳{totalCustomerValue.toFixed(0)}</p>
           </div>
         </div>
 
@@ -234,7 +234,7 @@ export default function CustomersPage() {
                       {customer.totalPurchases}
                     </td>
                     <td className="text-right py-4 px-4 text-primary font-semibold">
-                      ₹{customer.totalSpent.toFixed(0)}
+                      ৳{customer.totalSpent.toFixed(0)}
                     </td>
                     <td className="py-4 px-4 text-muted-text text-xs">{customer.lastPurchase}</td>
                     <td className="py-4 px-4 text-center">

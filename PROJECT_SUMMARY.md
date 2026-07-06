@@ -173,9 +173,9 @@ src/
 | Total Products | 6 |
 | Total Customers | 3 |
 | Total Sales | 3 transactions |
-| Cumulative Sales Value | ₹113,500 |
+| Cumulative Sales Value | ৳113,500 |
 | Low Stock Items | 2 products |
-| Average Transaction | ₹37,833 |
+| Average Transaction | ৳37,833 |
 
 ---
 

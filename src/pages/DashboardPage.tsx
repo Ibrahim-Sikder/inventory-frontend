@@ -26,7 +26,7 @@ export function DashboardPage() {
     },
     {
       label: 'Total Sales',
-      value: `₹${(totalSales / 1000).toFixed(1)}K`,
+      value: `৳${(totalSales / 1000).toFixed(1)}K`,
       icon: ShoppingCart,
       color: 'bg-purple-500/10 text-purple-500',
     },
@@ -117,7 +117,7 @@ export function DashboardPage() {
                   </p>
                   <p className="text-xs text-muted">{sale.date}</p>
                 </div>
-                <p className="font-bold text-primary">₹{sale.total}</p>
+                <p className="font-bold text-primary">৳{sale.total}</p>
               </div>
             ))}
           </div>

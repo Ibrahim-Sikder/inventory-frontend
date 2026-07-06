@@ -6,14 +6,14 @@ import {
   useDeleteProductMutation,
   useGetAllProductsQuery
 } from '../redux/api/productApi'
-import { ProductModal } from './ProductModal'
+import { ProductModal } from '../components/ProductModal'
 
 export function ProductsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedProduct, setSelectedProduct] = useState<any>(null)
 
-  // Fetch products from API
+
   const { data, isLoading, error, refetch } = useGetAllProductsQuery({
     page: 1,
     limit: 100,
@@ -34,7 +34,6 @@ export function ProductsPage() {
   }, [products, searchTerm])
 
   const handleDelete = async (product: any) => {
-    // Show SweetAlert confirmation
     const result = await Swal.fire({
       title: 'Are you sure?',
       text: `You are about to delete "${product.name}". This action cannot be undone!`,
@@ -52,7 +51,7 @@ export function ProductsPage() {
         await deleteProduct(product._id).unwrap()
 
         // Show success toast
-        toast.success(`Product "${product.name}" deleted successfully! 🗑️`)
+        toast.success(`Product "${product.name}" deleted successfully! `)
 
         // Refresh the product list
         refetch()
@@ -185,11 +184,11 @@ export function ProductsPage() {
               </div>
               <div className="flex justify-between">
                 <span className="text-muted">Buy Price:</span>
-                <span className="text-foreground font-medium">₹{product.purchasePrice}</span>
+                <span className="text-foreground font-medium">৳{product.purchasePrice}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-muted">Sell Price:</span>
-                <span className="text-primary font-medium">₹{product.sellingPrice}</span>
+                <span className="text-primary font-medium">৳{product.sellingPrice}</span>
               </div>
             </div>
 

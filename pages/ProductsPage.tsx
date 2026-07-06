@@ -193,7 +193,7 @@ export default function ProductsPage() {
 
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
-                  Purchase Price (₹) *
+                  Purchase Price (৳) *
                 </label>
                 <input
                   type="number"
@@ -207,7 +207,7 @@ export default function ProductsPage() {
 
               <div>
                 <label className="block text-sm font-medium text-foreground mb-2">
-                  Selling Price (₹) *
+                  Selling Price (৳) *
                 </label>
                 <input
                   type="number"
@@ -290,10 +290,10 @@ export default function ProductsPage() {
                     <span className="font-medium">Category:</span> {product.category}
                   </p>
                   <p className="text-muted-text">
-                    <span className="font-medium">Buy Price:</span> ₹{product.purchasePrice}
+                    <span className="font-medium">Buy Price:</span> ৳{product.purchasePrice}
                   </p>
                   <p className="text-primary font-medium">
-                    <span className="text-muted-text">Sell Price:</span> ₹{product.sellingPrice}
+                    <span className="text-muted-text">Sell Price:</span> ৳{product.sellingPrice}
                   </p>
                 </div>
 
@@ -301,13 +301,12 @@ export default function ProductsPage() {
                   <p className="text-xs text-muted-text mb-2">Stock: {product.stock} units</p>
                   <div className="w-full bg-background rounded-full h-2">
                     <div
-                      className={`h-full rounded-full transition-all ${
-                        product.stock > 10
+                      className={`h-full rounded-full transition-all ${product.stock > 10
                           ? 'bg-green-500'
                           : product.stock > 5
-                          ? 'bg-yellow-500'
-                          : 'bg-red-500'
-                      }`}
+                            ? 'bg-yellow-500'
+                            : 'bg-red-500'
+                        }`}
                       style={{ width: `${Math.min((product.stock / 20) * 100, 100)}%` }}
                     ></div>
                   </div>
@@ -347,11 +346,10 @@ export default function ProductsPage() {
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`px-3 py-2 rounded-lg font-medium transition-colors ${
-                  currentPage === page
+                className={`px-3 py-2 rounded-lg font-medium transition-colors ${currentPage === page
                     ? 'bg-primary text-primary-foreground'
                     : 'bg-card border border-border text-foreground hover:bg-background'
-                }`}
+                  }`}
               >
                 {page}
               </button>

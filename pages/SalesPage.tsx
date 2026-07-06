@@ -169,7 +169,7 @@ export default function SalesPage() {
                   >
                     {products.map((p) => (
                       <option key={p.id} value={p.id}>
-                        {p.name} (₹{p.price})
+                        {p.name} (৳{p.price})
                       </option>
                     ))}
                   </select>
@@ -231,10 +231,10 @@ export default function SalesPage() {
                         className="border-b border-border/50 hover:bg-background transition-colors"
                       >
                         <td className="py-3 px-4 text-foreground">{item.productName}</td>
-                        <td className="text-right py-3 px-4 text-foreground">₹{item.unitPrice}</td>
+                        <td className="text-right py-3 px-4 text-foreground">৳{item.unitPrice}</td>
                         <td className="text-right py-3 px-4 text-foreground">{item.quantity}</td>
                         <td className="text-right py-3 px-4 text-primary font-semibold">
-                          ₹{(item.quantity * item.unitPrice).toFixed(2)}
+                          ৳{(item.quantity * item.unitPrice).toFixed(2)}
                         </td>
                         <td className="text-center py-3 px-4">
                           <button
@@ -252,7 +252,7 @@ export default function SalesPage() {
                 {/* Grand Total */}
                 <div className="mt-4 flex items-center justify-end gap-4 p-4 bg-background rounded-lg border border-border/50">
                   <span className="text-sm font-medium text-muted-text">Grand Total:</span>
-                  <span className="text-2xl font-bold text-primary">₹{grandTotal.toFixed(2)}</span>
+                  <span className="text-2xl font-bold text-primary">৳{grandTotal.toFixed(2)}</span>
                 </div>
 
                 {/* Action Buttons */}
@@ -303,15 +303,14 @@ export default function SalesPage() {
                     <td className="py-3 px-4 text-foreground">{sale.customer}</td>
                     <td className="text-center py-3 px-4 text-muted-text">{sale.items.length}</td>
                     <td className="text-right py-3 px-4 text-primary font-semibold">
-                      ₹{sale.total.toFixed(2)}
+                      ৳{sale.total.toFixed(2)}
                     </td>
                     <td className="text-center py-3 px-4">
                       <span
-                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
-                          sale.status === 'completed'
+                        className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${sale.status === 'completed'
                             ? 'bg-green-500/10 text-green-400'
                             : 'bg-yellow-500/10 text-yellow-400'
-                        }`}
+                          }`}
                       >
                         {sale.status.charAt(0).toUpperCase() + sale.status.slice(1)}
                       </span>

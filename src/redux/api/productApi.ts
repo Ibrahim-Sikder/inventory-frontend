@@ -4,7 +4,7 @@ import { baseApi } from "./baseApi";
 
 export const productApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
-        // Create Product
+
         createProduct: builder.mutation({
             query: (data) => ({
                 url: "/products",
@@ -14,8 +14,6 @@ export const productApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["product"],
         }),
-
-        // Get All Products with pagination, search, filters
         getAllProducts: builder.query({
             query: ({ limit = 10, page = 1, searchTerm = "", category, minPrice, maxPrice, sort }) => ({
                 url: "/products",
@@ -36,7 +34,7 @@ export const productApi = baseApi.injectEndpoints({
             },
         }),
 
-        // Get Single Product
+
         getSingleProduct: builder.query({
             query: (id) => ({
                 url: `/products/${id}`,
@@ -47,8 +45,6 @@ export const productApi = baseApi.injectEndpoints({
                 return response;
             },
         }),
-
-        // Update Product
         updateProduct: builder.mutation({
             query: ({ id, data }) => ({
                 url: `/products/${id}`,
@@ -58,8 +54,6 @@ export const productApi = baseApi.injectEndpoints({
             }),
             invalidatesTags: ["product"],
         }),
-
-        // Delete Product
         deleteProduct: builder.mutation({
             query: (id) => ({
                 url: `/products/${id}`,
@@ -68,7 +62,6 @@ export const productApi = baseApi.injectEndpoints({
             invalidatesTags: ["product"],
         }),
 
-        // Get Low Stock Products
         getLowStockProducts: builder.query({
             query: () => ({
                 url: "/products/low-stock",

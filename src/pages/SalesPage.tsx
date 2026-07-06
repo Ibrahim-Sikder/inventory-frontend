@@ -96,7 +96,7 @@ export function SalesPage() {
                 <option value="">Select a product...</option>
                 {mockProducts.map((product) => (
                   <option key={product.id} value={product.id}>
-                    {product.name} (₹{product.sellPrice})
+                    {product.name} (৳{product.sellPrice})
                   </option>
                 ))}
               </select>
@@ -138,10 +138,10 @@ export function SalesPage() {
                     return (
                       <tr key={item.productId} className="text-foreground">
                         <td className="py-3">{product?.name}</td>
-                        <td className="text-center">₹{product?.sellPrice}</td>
+                        <td className="text-center">৳{product?.sellPrice}</td>
                         <td className="text-center">{item.quantity}</td>
                         <td className="text-right font-medium">
-                          ₹{((product?.sellPrice || 0) * item.quantity).toLocaleString()}
+                          ৳{((product?.sellPrice || 0) * item.quantity).toLocaleString()}
                         </td>
                         <td className="text-center">
                           <button
@@ -160,7 +160,7 @@ export function SalesPage() {
               <div className="mt-4 pt-4 border-t border-border flex justify-between items-center">
                 <span className="font-semibold text-foreground">Total Amount:</span>
                 <span className="text-2xl font-bold text-primary">
-                  ₹{calculateTotal().toLocaleString()}
+                  ৳{calculateTotal().toLocaleString()}
                 </span>
               </div>
 
@@ -186,7 +186,7 @@ export function SalesPage() {
                 </p>
                 <p className="text-xs text-muted mt-1">{sale.date}</p>
                 <p className="text-primary font-bold text-sm mt-2">
-                  ₹{sale.total.toLocaleString()}
+                  ৳{sale.total.toLocaleString()}
                 </p>
               </div>
             ))}
