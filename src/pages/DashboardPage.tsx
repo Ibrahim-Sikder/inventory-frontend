@@ -4,8 +4,9 @@ import {
   ShoppingCart,
   Users
 } from 'lucide-react'
-import Loading from '../components/Loading'
+
 import { useGetDashboardStatsQuery } from '../redux/api/dashboardApi'
+import { LoadingSpinner } from '../components/LoadingSpinner'
 
 export function DashboardPage() {
   const { data, isLoading, error, refetch } = useGetDashboardStatsQuery({})
@@ -13,7 +14,7 @@ export function DashboardPage() {
 
 
   if (isLoading) {
-    return <Loading />
+    return <LoadingSpinner />
   }
 
 
@@ -204,3 +205,5 @@ export function DashboardPage() {
     </div>
   )
 }
+
+export default DashboardPage

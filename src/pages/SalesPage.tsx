@@ -5,7 +5,7 @@ import { useGetAllSalesQuery } from '../redux/api/saleApi'
 import { useGetAllCustomersQuery } from '../redux/api/customerApi'
 import { useGetAllProductsQuery } from '../redux/api/productApi'
 import { useCreateSaleMutation } from '../redux/api/saleApi'
-import Loading from '../components/Loading'
+import Loading from '../components/LoadingSpinner'
 import { RecentSales } from '../components/RecentSales'
 import { SalesStats } from '../components/SalesStats'
 

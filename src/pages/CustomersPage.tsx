@@ -1,14 +1,14 @@
-import { useState, useMemo } from 'react'
-import { Plus, Edit2, Trash2, Search, Loader2, Phone, Mail, MapPin } from 'lucide-react'
+import { Edit2, Mail, MapPin, Phone, Plus, Search, Trash2 } from 'lucide-react'
+import { useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import Swal from 'sweetalert2'
+import { CustomerModal } from '../components/CustomerModal'
+import { CustomerStats } from '../components/CustomerStats'
+import Loading from '../components/LoadingSpinner'
 import {
   useDeleteCustomerMutation,
   useGetAllCustomersQuery
 } from '../redux/api/customerApi'
-import { CustomerModal } from '../components/CustomerModal'
-import { CustomerStats } from '../components/CustomerStats'
-import Loading from '../components/Loading'
 
 export function CustomersPage() {
   const [searchTerm, setSearchTerm] = useState('')
