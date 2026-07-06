@@ -25,6 +25,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   ]
 
   const navItems = allNavItems.filter((item) => {
+    // Check if user exists and has a role
     if (!user) return false
     return item.roles.includes(user.role)
   })

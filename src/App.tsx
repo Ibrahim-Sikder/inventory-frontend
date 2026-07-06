@@ -14,13 +14,7 @@ import { useLazyGetMeQuery } from './redux/api/auth.api'
 
 type TRole = 'admin' | 'manager' | 'employee'
 
-function ProtectedRoute({
-  children,
-  roles,
-}: {
-  children: React.ReactNode
-  roles?: TRole[]
-}) {
+function ProtectedRoute({ children, roles }: { children: React.ReactNode; roles?: TRole[] }) {
   const { isAuthenticated, isLoading, user } = useAuth()
 
   // if (isLoading) {
@@ -31,17 +25,12 @@ function ProtectedRoute({
   //   )
   // }
 
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />
-  }
-
-  // role gate: if this route restricts roles and the user's role isn't included, bounce to dashboard
-  if (roles && user && !roles.includes(user.role as TRole)) {
-    return <Navigate to="/dashboard" replace />
-  }
+  if (!isAuthenticated) return <Navigate to="/login" replace />
+  if (roles && user && !roles.includes(user.role as TRole)) return <Navigate to="/dashboard" replace />
 
   return <Layout>{children}</Layout>
 }
+
 
 function AppRoutes() {
   const { isAuthenticated, isLoading } = useAuth()
@@ -105,14 +94,17 @@ export default function App() {
   const [triggerGetMe] = useLazyGetMeQuery()
 
   useEffect(() => {
-    // On first load / refresh, ask the backend "who am I?" using the httpOnly cookie.
-    // This is what restores the session — Redux state alone can't survive a refresh.
     (async () => {
       try {
         const result = await triggerGetMe().unwrap()
         dispatch(setUser(result.data))
       } catch {
-        dispatch(logout())
+        // Only clear user if nobody logged in manually while this request was in flight
+        dispatch((_dispatch, getState) => {
+          if (!getState().auth.user) {
+            dispatch(logout())
+          }
+        })
       } finally {
         dispatch(setAuthLoading(false))
       }
