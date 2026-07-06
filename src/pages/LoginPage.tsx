@@ -1,41 +1,56 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '../context/AuthContext'
 import { Lock, LogIn } from 'lucide-react'
+import { useLoginMutation } from '../redux/api/auth.api'
+import { useAppDispatch } from '../redux/hooks'
+import { setUser } from '../redux/features/auth/authSlice'
 
 export function LoginPage() {
-  const [email, setEmail] = useState('admin@example.com')
-  const [password, setPassword] = useState('password123')
+  const [email, setEmail] = useState('admin@gmail.com')
+  const [password, setPassword] = useState('123456')
   const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const { login } = useAuth()
   const navigate = useNavigate()
+  const dispatch = useAppDispatch()
+
+  const [loginMutation, { isLoading }] = useLoginMutation()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
-    setIsLoading(true)
 
     try {
-      await login(email, password)
+      const response = await loginMutation({
+        credential: email,
+        password: password,
+      }).unwrap()
+
+      // backend sets the JWT as an httpOnly cookie itself.
+      // we only store the returned user profile in redux.
+      dispatch(setUser(response.data))
+
       navigate('/dashboard')
-    } catch (err) {
-      setError('Invalid email or password')
-    } finally {
-      setIsLoading(false)
+    } catch (err: any) {
+      if (err?.data?.message) {
+        setError(err.data.message)
+      } else if (err?.status === 403) {
+        setError('Invalid credentials or account is blocked')
+      } else if (err?.status === 404) {
+        setError('User not found')
+      } else {
+        setError('Invalid email or password')
+      }
     }
   }
 
   const demoCredentials = [
-    { role: 'Admin', email: 'admin@example.com', password: 'password123' },
-    { role: 'Manager', email: 'manager@example.com', password: 'password123' },
-    { role: 'Employee', email: 'employee@example.com', password: 'password123' },
+    { role: 'admin', email: 'admin@gmail.com', password: '123456' },
+    { role: 'manager', email: 'manager@gmail.com', password: '123456' },
+    { role: 'employee', email: 'employee@gmail.com', password: '123456' },
   ]
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <div className="w-full max-w-md">
-        {/* Logo Section */}
         <div className="text-center mb-8">
           <div className="flex items-center justify-center mb-4">
             <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
@@ -46,7 +61,6 @@ export function LoginPage() {
           <p className="text-muted">Inventory & Sales Management System</p>
         </div>
 
-        {/* Login Form */}
         <div className="bg-card rounded-xl border border-border p-8 shadow-lg mb-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
@@ -54,12 +68,8 @@ export function LoginPage() {
                 {error}
               </div>
             )}
-
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-foreground mb-2"
-              >
+              <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
                 Email Address
               </label>
               <input
@@ -72,12 +82,8 @@ export function LoginPage() {
                 required
               />
             </div>
-
             <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-foreground mb-2"
-              >
+              <label htmlFor="password" className="block text-sm font-medium text-foreground mb-2">
                 Password
               </label>
               <input
@@ -90,7 +96,6 @@ export function LoginPage() {
                 required
               />
             </div>
-
             <button
               type="submit"
               disabled={isLoading}
@@ -102,11 +107,8 @@ export function LoginPage() {
           </form>
         </div>
 
-        {/* Demo Credentials */}
         <div className="bg-card rounded-xl border border-border p-6">
-          <p className="text-sm font-medium text-foreground mb-4">
-            Demo Credentials:
-          </p>
+          <p className="text-sm font-medium text-foreground mb-4">Demo Credentials:</p>
           <div className="space-y-3">
             {demoCredentials.map((cred) => (
               <button

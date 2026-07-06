@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { baseApi } from "./baseApi";
 
 export const userApi = baseApi.injectEndpoints({
@@ -6,7 +8,7 @@ export const userApi = baseApi.injectEndpoints({
       query: (data) => ({
         url: "/user",
         method: "POST",
-       data,
+        data,
       }),
       invalidatesTags: ["user"],
     }),
