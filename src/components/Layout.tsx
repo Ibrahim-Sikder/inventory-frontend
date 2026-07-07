@@ -7,6 +7,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [isMobile, setIsMobile] = useState(false)
   const { user, logout } = useAuth()
+  console.log('User role:', user) // Debugging line to check the user role
 
   const navigate = useNavigate()
   const location = useLocation()

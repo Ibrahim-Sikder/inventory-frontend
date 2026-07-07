@@ -21,6 +21,8 @@ export function DashboardPage() {
     return <LoadingSpinner />
   }
 
+  console.log('Dashboard data:', data) // Debugging line to check the fetched data
+
 
   if (error) {
     return (

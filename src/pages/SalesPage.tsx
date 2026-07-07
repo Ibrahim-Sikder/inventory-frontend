@@ -137,7 +137,7 @@ export function SalesPage() {
       const result = await createSale(saleData).unwrap()
 
       if (result.success) {
-        toast.success('Sale created successfully! 🎉')
+        toast.success('Sale created successfully!')
         // Reset form
         setSaleItems([])
         setSelectedCustomer('')
@@ -303,7 +303,7 @@ export function SalesPage() {
 
               <button
                 onClick={createSaleHandler}
-                disabled={!selectedCustomer || saleItems.length === 0 || isSubmitting}
+                // disabled={!selectedCustomer || saleItems.length === 0 || isSubmitting}
                 className="w-full mt-4 bg-success hover:bg-success/90 disabled:opacity-50 disabled:cursor-not-allowed text-white px-4 py-3 rounded-lg transition-colors font-medium"
               >
                 {isSubmitting ? 'Creating Sale...' : 'Confirm Sale'}
