@@ -1,270 +1,205 @@
-# Mini ERP System - React + TypeScript SPA
+# Mini ERP – Inventory & Sales Management System (Frontend)
 
-A modern, fully-functional Enterprise Resource Planning (ERP) system built with **React 19 + TypeScript** and **Vite**. This application provides complete inventory management, sales tracking, and customer relationship management with a professional dark-themed UI. All data is static and self-contained for immediate use without backend dependencies.
+Frontend client for the Mini ERP Inventory & Sales Management System, built for the **MERN Stack Technical Assessment** (Full Stack MERN Developer position).
 
-## 🎯 Features
+This repository contains the **frontend only**. It's a React 19 + TypeScript SPA built with Vite, styled with Tailwind CSS, using Redux Toolkit for state/data management, React Router for navigation, and Axios for API calls.
 
-### Authentication & Authorization
-- **JWT-based Authentication**: Secure login system with token-based sessions
-- **Role-Based Access Control**: Three distinct roles with specific permissions
-  - **Admin**: Full system access
-  - **Manager**: Product and sales management, customer management
-  - **Employee**: View products, create sales
-- **Protected Routes**: All sensitive pages require authentication
+---
 
-### Dashboard
-- **Real-time Statistics**: Total products, customers, sales, and low stock alerts
-- **Low Stock Products**: Quick view of inventory items below threshold
-- **Recent Sales**: View latest transactions at a glance
-- **Business Insights**: Visual overview of key metrics
+## 🔗 Live Links
 
-### Product Management
-- **Full CRUD Operations**: Create, read, update, and delete products
-- **Product Fields**:
-  - Product name and SKU
-  - Category classification
-  - Purchase and selling prices
-  - Stock quantity tracking
-  - Product image/icon support
-- **Search & Filter**: Find products quickly by name or SKU
-- **Pagination**: Efficient browsing of large product catalogs
-- **Stock Visualization**: Visual stock level indicators
+| Resource | URL |
+|---|---|
+| Live Frontend | `https://erp.softypy.com/sales` |
+| Live Backend API | `https://erpapi.softypy.com/sales/api/v1` |
+| Frontend GitHub Repository | `https://github.com/Ibrahim-Sikder/inventory-frontend` |
+| Backend GitHub Repository | `https://github.com/Ibrahim-Sikder/inventory-api` |
 
-### Sales Management
-- **Create Sales Transactions**: Add multiple products to a single sale
-- **Customer Selection**: Link sales to customer records
-- **Dynamic Calculation**: Automatic total calculation as items are added
-- **Stock Validation**: Prevents selling unavailable or insufficient stock
-- **Sales History**: Complete record of all transactions
-- **Transaction Details**: View items, quantities, and totals
+## 🔑 Admin Login Credentials
 
-### Customer Management
-- **Customer Directory**: Complete customer contact information
-- **Purchase Tracking**: Monitor customer purchase history
-- **Customer Lifetime Value**: Track total spending per customer
-- **Contact Information**: Email and phone number storage
-- **Search Capability**: Find customers quickly by name, email, or phone
+| Field | Value |
+|---|---|
+| Email | `admin@gmail.com` |
+| Password | `123456` |
+| Role | `admin` |
 
-## 🛠️ Technology Stack
+> ⚠️ These are demo credentials provided solely for evaluation purposes.
 
-- **React 19** - Modern UI library with hooks
-- **TypeScript** - Type safety and better developer experience
-- **Vite** - Lightning-fast build tool
-- **React Router v7** - Client-side routing without server dependencies
-- **Tailwind CSS v4** - Utility-first styling
-- **Lucide React** - Beautiful, consistent icon library
-- **Context API** - State management for authentication
+---
 
-## 📋 Prerequisites
+## 🧱 Tech Stack
 
-- **Node.js**: v18 or higher
-- **pnpm** (recommended) or npm/yarn
+- **Library:** React 19 + TypeScript
+- **Build Tool:** Vite
+- **Routing:** React Router v7 (`react-router-dom`)
+- **State & Data:** Redux Toolkit + React Redux (RTK Query for API calls, backed by a custom Axios base query)
+- **HTTP Client:** Axios (with interceptors for silent access-token refresh on 401)
+- **Styling:** Tailwind CSS v4 (`@tailwindcss/postcss`)
+- **Icons:** lucide-react
+- **Notifications / Alerts:** react-hot-toast, sweetalert2
+- **Dates:** date-fns
 
-## 🚀 Quick Start
+---
 
-### Installation
+## ✨ Features
 
-```bash
-# Install dependencies
-pnpm install
-
-# Start development server
-pnpm dev
-
-# Build for production
-pnpm build
-
-# Preview production build
-pnpm preview
-```
-
-The app will automatically open at `http://localhost:3000`
-
-## 📖 Usage Guide
-
-### Demo Credentials
-
-#### Admin Account
-- **Email**: `admin@example.com`
-- **Password**: `password123`
-- **Access**: Full system access, all modules
-
-#### Manager Account
-- **Email**: `manager@example.com`
-- **Password**: `password123`
-- **Access**: Products, sales, customers
-
-#### Employee Account
-- **Email**: `employee@example.com`
-- **Password**: `password123`
-- **Access**: View products, create sales
-
-### Login
-1. Navigate to the login page
-2. Enter email and password from demo credentials
-3. Click "Sign In"
-4. You'll be redirected to the dashboard
+### Authentication
+- Login page that authenticates against the backend `/auth/login` endpoint
+- Access/refresh tokens handled via HTTP-only cookies set by the backend
+- Axios response interceptor triggers `/auth/refresh-token` on a `401` and retries the original request
+- `ProtectedRoute` wrapper redirects unauthenticated users to `/login`
+- Role-aware UI: navigation and actions are shown/hidden based on the logged-in user's role (`admin`, `manager`, `employee`)
 
 ### Dashboard
-- View key business metrics
-- Monitor low stock items
-- Check recent sales activity
-- Get quick business insights
+- Statistics cards: Total Products, Total Sales, Low Stock Products
+- Low Stock Products list (stock < 5)
 
-### Products Module
-- **View Products**: Browse all products with card view
-- **Add Product**: Click "Add Product", fill in details
-- **Edit Product**: Click edit icon on product card
-- **Delete Product**: Click trash icon to remove product
-- **Search**: Use search bar to find products by name or SKU
-- **Pagination**: Navigate through product pages
+### Products
+- Product list with search and pagination
+- Add Product (with mandatory image upload)
+- Edit Product (image optional on update)
+- Delete Product
+- Low-stock indicator on list rows
 
-### Sales Module
-- **Create Sale**:
-  1. Enter customer name
-  2. Select products from dropdown
-  3. Enter quantity
-  4. Click "Add Item"
-  5. Review items and totals
-  6. Click "Complete Sale"
-- **View History**: See all completed transactions
-- **Stock Protection**: System prevents overselling
+### Sales
+- Create Sale page:
+  - Multi-product selection with quantity input per line
+  - Automatic subtotal and grand-total calculation as items/quantities change
+  - Prevents submitting quantities that exceed available stock
+- Sale history / list view
 
-### Customers Module
-- **View Customers**: Browse all customer records
-- **Add Customer**: Click "Add Customer", enter details
-- **Customer Metrics**: See total purchases and spending
-- **Search**: Find customers by name, email, or phone
-- **Delete**: Remove customer records
+### Validation & UX
+- Client-side form validation before hitting the API
+- Toasts (`react-hot-toast`) for success/error feedback
+- Confirmation modals (`sweetalert2`) for destructive actions like delete
+
+---
 
 ## 📁 Project Structure
 
 ```
-mini-erp/
-├── src/
-│   ├── main.tsx                       # Entry point
-│   ├── App.tsx                        # Main app with routing
-│   ├── index.css                      # Global styles with Tailwind
-│   ├── types.ts                       # TypeScript interfaces
-│   │
-│   ├── context/
-│   │   └── AuthContext.tsx            # Authentication state
-│   │
-│   ├── components/
-│   │   └── Layout.tsx                 # Main layout with sidebar
-│   │
-│   ├── pages/
-│   │   ├── LoginPage.tsx              # Login page
-│   │   ├── DashboardPage.tsx          # Dashboard with KPIs
-│   │   ├── ProductsPage.tsx           # Product management
-│   │   ├── SalesPage.tsx              # Sales creation
-│   │   └── CustomersPage.tsx          # Customer management
-│   │
-│   └── data/
-│       └── mockData.ts                # Static mock data
-│
-├── index.html                         # HTML entry point
-├── vite.config.ts                     # Vite configuration
-├── tsconfig.json                      # TypeScript config
-├── postcss.config.mjs                 # PostCSS config
-├── tailwind.config.js                 # Tailwind config
-└── package.json                       # Dependencies
+src/
+├── components/
+│   ├── layout/
+│   ├── forms/
+│   └── ui/
+├── hooks/
+│   └── useAuth.ts
+├── pages/
+│   ├── LoginPage.tsx
+│   ├── DashboardPage.tsx
+│   ├── ProductsPage.tsx
+│   ├── SalesPage.tsx
+│   └── CustomersPage.tsx
+├── redux/
+│   ├── api/
+│   │   ├── baseApi.ts
+│   │   ├── authApi.ts
+│   │   ├── productApi.ts
+│   │   ├── saleApi.ts
+│   │   ├── customerApi.ts
+│   │   └── dashboardApi.ts
+│   ├── features/
+│   │   └── auth/
+│   │       └── authSlice.ts
+│   ├── hooks.ts
+│   └── store.ts
+├── axios/
+│   ├── axiosInstance.ts
+│   └── axiosBaseQuery.ts
+├── routes/
+│   ├── index.tsx
+│   └── ProtectedRoute.tsx
+├── types/
+├── utils/
+├── App.tsx
+└── main.tsx
 ```
-
-## 🔐 Authentication
-
-- **Context-based**: Uses React Context API for state management
-- **Demo Credentials**: Pre-configured demo accounts for testing
-- **Protected Routes**: Automatic route protection for authenticated users
-- **Session State**: In-memory user session (persists during session)
-
-## 💾 Data Management
-
-All data is **static and hardcoded** in `src/data/mockData.ts`:
-- **Products**: 6 items with pricing and stock levels
-- **Customers**: 3 sample customers
-- **Sales**: 3 transaction examples
-
-### To Connect a Backend:
-1. Replace `mockData.ts` with API calls
-2. Update `AuthContext.tsx` to use real authentication
-3. Convert static data to dynamic API responses
-4. Add proper error handling and loading states
-
-## 🎨 Design
-
-- **Color Scheme**: Dark blue/slate with bright blue accents
-- **Responsive**: Mobile-first, works on all screen sizes
-- **Dark Theme**: Professional dark interface
-- **Collapsible Sidebar**: Toggle for better space management
-
-## 🧠 How It Works
-
-### State Management
-- **Auth Context**: Manages login/logout and user role
-- **React Hooks**: useState for component-level state
-- **React Router**: Client-side navigation
-
-### Key Features
-1. **Login** - Authenticate with demo credentials
-2. **Dashboard** - View KPIs and recent activity
-3. **Products** - Browse, search, and manage inventory
-4. **Sales** - Create transactions and view history
-5. **Customers** - Manage customer relationships
-
-## 📱 Responsive Design
-
-- **Desktop**: Full sidebar, multi-column layouts
-- **Tablet**: Optimized grid system
-- **Mobile**: Single column, touch-friendly buttons
-- **Collapsible**: Sidebar toggles for smaller screens
-
-## 🚀 Perfect For
-
-- Learning React + TypeScript
-- SPA (Single Page Application) projects
-- Frontend prototyping
-- Demo and presentation
-- Educational purposes
-- Starting point for full ERP system
-
-## 🔗 Next Steps to Productionize
-
-1. **Backend Setup**
-   - Create API endpoints for products, sales, customers
-   - Set up real authentication (JWT, OAuth, etc.)
-   - Connect to database (PostgreSQL, MongoDB, etc.)
-
-2. **Data Integration**
-   - Replace mock data with API calls
-   - Implement proper error handling
-   - Add loading states and spinners
-
-3. **Features**
-   - Add edit/delete functionality backend support
-   - Implement search with server-side filtering
-   - Add pagination for large datasets
-
-4. **Security**
-   - Add password hashing
-   - Implement rate limiting
-   - Add CORS protection
-   - Use secure tokens
-
-## 💡 Tips for Development
-
-- **TypeScript**: All components have full type safety
-- **Routing**: React Router handles all navigation
-- **Styling**: Tailwind CSS with CSS variables for theming
-- **Icons**: Lucide React for consistent iconography
-- **Structure**: Clear separation of concerns
-
-## 📝 License
-
-MIT - Use freely for personal and commercial projects
 
 ---
 
-**Built with React 19 + TypeScript + Vite** ✨
-**Version**: 1.0.0
-**Last Updated**: July 6, 2026
+## ⚙️ Setup & Installation
+
+### Prerequisites
+- Node.js v18+
+- The backend API running locally or deployed (see the backend README)
+
+### 1. Clone the repository
+
+```bash
+git clone <https://github.com/Ibrahim-Sikder/inventory-frontend> mini-erp-client
+cd mini-erp-client
+```
+
+### 2. Install dependencies
+
+```bash
+npm install
+```
+
+### 3. Environment variables
+
+Create a `.env` file in the project root:
+
+```env
+VITE_API_URL=http://localhost:9007/api/v1
+```
+
+> Vite only exposes variables prefixed with `VITE_` to client code — use `import.meta.env.VITE_API_URL` to read this in `axiosInstance.ts`.
+
+### 4. Run in development
+
+```bash
+npm run dev
+```
+
+The app runs at `http://localhost:3000` by default.
+
+### 5. Build for production
+
+```bash
+npm run build
+```
+
+### 6. Preview / run the production build
+
+```bash
+npm run preview
+# or, to serve on a specific host/port (matches this project's "start" script):
+npm start
+```
+`npm start` runs `vite preview --host 0.0.0.0 --port 9008`, so the production preview is served on port `9008`.
+
+### 7. Lint
+
+```bash
+npm run lint
+```
+
+---
+
+## 🔗 Connecting to the Backend
+
+- All API calls go through `VITE_API_URL` (see `axios/axiosInstance.ts`).
+- The backend uses HTTP-only cookies for auth, so Axios must be configured with `withCredentials: true`, and the backend's CORS config (`CROSS_ORIGIN_CLIENT`) must include this frontend's origin.
+- On a `401` response, the Axios interceptor calls `/auth/refresh-token` once, then retries the original request; if refresh also fails, the user is redirected to `/login`.
+
+---
+
+## 🚀 Bonus Implementations
+
+- [x] Modular Feature-Based Architecture
+- [x] Reusable components (forms, protected route wrapper, toasts)
+- [ ] Dynamic Role & Permission Management (database-driven)
+- [ ] Generic Query Builder (search, filter, sort, pagination) shared across list pages
+- [ ] Socket.io / WebSocket real-time dashboard updates
+
+> Update this checklist to reflect what you actually implemented before submitting.
+
+---
+
+## 👤 Author
+
+**Name:** Ibrahim Sikder
+**Email:** ibrahimsikder5033@gmail.com
+**Submitted for:** Full Stack (MERN) Developer position
