@@ -7,13 +7,17 @@ import {
 
 import { useGetDashboardStatsQuery } from '../redux/api/dashboardApi'
 import { LoadingSpinner } from '../components/LoadingSpinner'
+import { useAuth } from '@/hooks/useAuth'
 
 export function DashboardPage() {
-  const { data, isLoading, error, refetch } = useGetDashboardStatsQuery({})
-  console.log('Dashboard data:', data)
+  const { isAuthenticated, isLoading: authLoading } = useAuth()
 
+  const { data, isLoading, error, refetch } = useGetDashboardStatsQuery(
+    {},
+    { skip: !isAuthenticated || authLoading }
+  )
 
-  if (isLoading) {
+  if (authLoading || (isLoading && isAuthenticated)) {
     return <LoadingSpinner />
   }
 

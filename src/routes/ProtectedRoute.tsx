@@ -2,6 +2,7 @@ import { Navigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { Layout } from '../components/Layout'
 import { TRole } from './index'
+import LoadingSpinner from '@/components/LoadingSpinner'
 
 interface ProtectedRouteProps {
     children: React.ReactNode
@@ -11,13 +12,7 @@ interface ProtectedRouteProps {
 export function ProtectedRoute({ children, roles }: ProtectedRouteProps) {
     const { isAuthenticated, isLoading, user } = useAuth()
 
-    if (isLoading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-background">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-            </div>
-        )
-    }
+    if (isLoading) return <LoadingSpinner />
 
     if (!isAuthenticated) {
         return <Navigate to="/login" replace />

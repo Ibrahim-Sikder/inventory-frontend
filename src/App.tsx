@@ -10,8 +10,6 @@ import { generateRoutes } from './routes'
 function AppRoutes() {
   const { isAuthenticated } = useAuth()
 
-
-
   const routes = generateRoutes(isAuthenticated)
   const element = useRoutes(routes)
 

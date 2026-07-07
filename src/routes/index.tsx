@@ -45,7 +45,6 @@ export const routeConfigs: RouteConfig[] = [
   },
 ]
 
-
 export const generateRoutes = (isAuthenticated: boolean) => {
   const routes: RouteObject[] = []
 
@@ -65,7 +64,12 @@ export const generateRoutes = (isAuthenticated: boolean) => {
 
   routes.push({
     path: '/',
-    element: <Navigate to="/dashboard" replace />,
+    element: <Navigate to={isAuthenticated ? '/dashboard' : '/login'} replace />,
+  })
+
+  routes.push({
+    path: '*',
+    element: <Navigate to={isAuthenticated ? '/dashboard' : '/login'} replace />,
   })
 
   return routes
