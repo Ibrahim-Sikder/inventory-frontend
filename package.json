@@ -7,7 +7,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx",
-    "start": "next start -p 9008"
+    "start": "vite preview --host 0.0.0.0 --port 9008"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.12.0",
