@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { ChevronLeft, ChevronRight, Home, LogOut, Menu, Package, ShoppingCart, Users } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
-import { Menu, X, LogOut, Home, Package, ShoppingCart, Users, ChevronLeft, ChevronRight } from 'lucide-react'
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(true)
@@ -90,8 +90,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 if (isMobile) setSidebarOpen(false)
               }}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${isActive(path)
-                  ? 'bg-primary/10 text-primary font-medium'
-                  : 'text-muted hover:bg-background hover:text-foreground'
+                ? 'bg-primary/10 text-primary font-medium'
+                : 'text-muted hover:bg-background hover:text-foreground'
                 }`}
             >
               <Icon className="w-5 h-5 flex-shrink-0" />
