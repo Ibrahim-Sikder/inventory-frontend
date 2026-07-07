@@ -1,7 +1,6 @@
 import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
 import { BrowserRouter, useRoutes } from 'react-router-dom'
-import { LoadingSpinner } from './components/LoadingSpinner'
 import { useAuth } from './hooks/useAuth'
 import { useLazyGetMeQuery } from './redux/api/auth.api'
 import { logout, setAuthLoading, setUser } from './redux/features/auth/authSlice'
@@ -9,11 +8,9 @@ import { useAppDispatch } from './redux/hooks'
 import { generateRoutes } from './routes'
 
 function AppRoutes() {
-  const { isAuthenticated, isLoading } = useAuth()
+  const { isAuthenticated } = useAuth()
 
-  if (isLoading) {
-    return <LoadingSpinner />
-  }
+
 
   const routes = generateRoutes(isAuthenticated)
   const element = useRoutes(routes)
