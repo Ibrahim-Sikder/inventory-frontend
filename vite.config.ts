@@ -15,9 +15,9 @@ export default defineConfig({
     open: true,
   },
 
-  // preview: {
-  //   host: "0.0.0.0",
-  //   port: 9008,
-  //   allowedHosts: ["erp.softypy.com"],
-  // },
+  preview: {
+    host: "0.0.0.0",
+    port: 9008,
+    allowedHosts: ["erp.softypy.com"],
+  },
 });
